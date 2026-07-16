@@ -1,0 +1,11 @@
+Lucide Icons — ISC License
+https://lucide.dev | https://github.com/lucide-icons/lucide
+
+Icons in this folder are from the Lucide icon set (open source).
+You may use, modify, and distribute them under the ISC License.
+
+Copyright (c) for portions of Lucide are held by the respective authors.
+See the Lucide repository for full attribution.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, without warranty of any kind.
