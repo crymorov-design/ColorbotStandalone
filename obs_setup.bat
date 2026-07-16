@@ -154,8 +154,10 @@ if not exist "%APPDATA%\obs-studio\basic\scenes" (
     mkdir "%APPDATA%\obs-studio\basic\scenes"
 )
 
-set /a CropX=(%WIDTH%-1024)/2
-set /a CropY=(%HEIGHT%-1024)/2
+rem CVM-style: capture a small centered region (mss_fov = 320) to keep UDP MJPEG light + low-latency
+set "FOVSIZE=320"
+set /a CropX=(%WIDTH%-%FOVSIZE%)/2
+set /a CropY=(%HEIGHT%-%FOVSIZE%)/2
 
 set /a CropXpart=(%WIDTH%/5)
 set /a CropYpart=(%HEIGHT%/2)
@@ -168,10 +170,10 @@ echo [General]
 echo Name=profile1
 echo.
 echo [Video]
-echo BaseCX=1024
-echo BaseCY=1024
-echo OutputCX=1024
-echo OutputCY=1024
+echo BaseCX=%FOVSIZE%
+echo BaseCY=%FOVSIZE%
+echo OutputCX=%FOVSIZE%
+echo OutputCY=%FOVSIZE%
 echo FPSType=2
 echo FPSNum=%FOVFPS%
 echo FPSDen=1
@@ -196,7 +198,7 @@ echo RecTracks=1
 echo RecEncoder=none
 echo FLVTrack=1
 echo FFOutputToFile=false
-echo FFVBitrate=4000
+echo FFVBitrate=25000
 echo FFVGOPSize=0
 echo FFUseRescale=false
 echo FFIgnoreCompat=false
@@ -208,10 +210,11 @@ echo RecRBSize=512
 echo AudioEncoder=ffmpeg_aac
 echo RecAudioEncoder=ffmpeg_aac
 echo RecSplitFileType=Time
+echo FFVCustomSettings=q=3
 echo FFURL=udp://%IP_INPUT%:41263
 echo FFFormat=mjpeg
 echo FFFormatMimeType=image/jpeg
-echo FFVEncoderId=8
+echo FFVEncoderId=7
 echo FFVEncoder=mjpeg
 echo FFAEncoderId=0
 echo FFAEncoder=
@@ -266,7 +269,7 @@ echo RecSplitFileType=Time
 echo FFURL=udp://%IP_INPUT%:41264
 echo FFFormat=mjpeg
 echo FFFormatMimeType=image/jpeg
-echo FFVEncoderId=8
+echo FFVEncoderId=7
 echo FFVEncoder=mjpeg
 echo FFAEncoderId=0
 echo FFAEncoder=
@@ -317,8 +320,8 @@ echo                             "x": 0.0,
 echo                             "y": 0.0
 echo                         },
 echo                         "bounds": {
-echo                             "x": 1024.0,
-echo                             "y": 1024.0
+echo                             "x": %FOVSIZE%.0,
+echo                             "y": %FOVSIZE%.0
 echo                         },
 echo                         "scale_filter": "disable",
 echo                         "blend_method": "default",
@@ -349,8 +352,8 @@ echo                     "versioned_id": "crop_filter",
 echo                     "settings": {
 echo                         "left": %CropX%,
 echo                         "top": %CropY%,
-echo                         "cx": 1024,
-echo                         "cy": 1024,
+echo                         "cx": %FOVSIZE%,
+echo                         "cy": %FOVSIZE%,
 echo                         "right": 100,
 echo                         "bottom": 100,
 echo                         "relative": false
@@ -484,8 +487,8 @@ echo RecFormat2=mkv
 echo {"current_scene":"LAN FOV","current_program_scene":"LAN FOV","name":"lan_receiver","scene_order":[{"name":"LAN FOV"},{"name":"LAN Recognition"}],"sources":[
 echo {"name":"LAN FOV","uuid":"a1000000-0000-0000-0000-000000000001","id":"scene","versioned_id":"scene","settings":{"id_counter":1,"custom_size":false,"items":[{"name":"UDP stream 41263","source_uuid":"a1000000-0000-0000-0000-000000000011","visible":true,"id":1,"pos":{"x":0.0,"y":0.0},"scale_filter":"disable","blend_method":"default","blend_type":"normal","private_settings":{}}]},"private_settings":{}},
 echo {"name":"LAN Recognition","uuid":"a1000000-0000-0000-0000-000000000002","id":"scene","versioned_id":"scene","settings":{"id_counter":1,"custom_size":false,"items":[{"name":"UDP stream 41264","source_uuid":"a1000000-0000-0000-0000-000000000012","visible":true,"id":1,"pos":{"x":0.0,"y":0.0},"scale_filter":"disable","blend_method":"default","blend_type":"normal","private_settings":{}}]},"private_settings":{}},
-echo {"name":"UDP stream 41263","uuid":"a1000000-0000-0000-0000-000000000011","id":"ffmpeg_source","versioned_id":"ffmpeg_source","settings":{"is_local_file":false,"input":"udp://@:41263?fifo_size=250000^&overrun_nonfatal=1","input_format":"mpegts","looping":false,"restart_on_activate":true,"close_when_inactive":true,"clear_on_media_end":false,"hw_decode":true},"private_settings":{}},
-echo {"name":"UDP stream 41264","uuid":"a1000000-0000-0000-0000-000000000012","id":"ffmpeg_source","versioned_id":"ffmpeg_source","settings":{"is_local_file":false,"input":"udp://@:41264?fifo_size=250000^&overrun_nonfatal=1","input_format":"mpegts","looping":false,"restart_on_activate":true,"close_when_inactive":true,"clear_on_media_end":false,"hw_decode":true},"private_settings":{}}
+echo {"name":"UDP stream 41263","uuid":"a1000000-0000-0000-0000-000000000011","id":"ffmpeg_source","versioned_id":"ffmpeg_source","settings":{"is_local_file":false,"input":"udp://@:41263?fifo_size=250000^&overrun_nonfatal=1","input_format":"mjpeg","looping":false,"restart_on_activate":true,"close_when_inactive":true,"clear_on_media_end":false,"hw_decode":true},"private_settings":{}},
+echo {"name":"UDP stream 41264","uuid":"a1000000-0000-0000-0000-000000000012","id":"ffmpeg_source","versioned_id":"ffmpeg_source","settings":{"is_local_file":false,"input":"udp://@:41264?fifo_size=250000^&overrun_nonfatal=1","input_format":"mjpeg","looping":false,"restart_on_activate":true,"close_when_inactive":true,"clear_on_media_end":false,"hw_decode":true},"private_settings":{}}
 echo ],"version":2}
 ) > "%receiverCollection%"
 echo Receiver setup is complete. Use option 5 to open the live preview without recording to disk.
