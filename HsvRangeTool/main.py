@@ -249,16 +249,5 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication([])
     widget = MainWindow()
-    
-    app.setStyle('Fusion')
-    app.setStyleSheet('''
-        QMainWindow { background-color: #0d1117; }
-        QLabel { color: #c9d1d9; font-weight: bold; }
-        QPushButton { background-color: #f85149; color: white; border-radius: 4px; padding: 5px; }
-        QPushButton:hover { background-color: #da3633; }
-        QComboBox { background-color: #161b22; color: #c9d1d9; border: 1px solid #30363d; border-radius: 4px; }
-        QSlider::groove:horizontal { background: #30363d; height: 6px; border-radius: 3px; }
-        QSlider::handle:horizontal { background: #f85149; width: 14px; margin-top: -4px; margin-bottom: -4px; border-radius: 7px; }
-    ''')
     widget.show()
-    sys.exit(app.exec_())
+    app.exec_()
